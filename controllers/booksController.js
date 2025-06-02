@@ -12,9 +12,8 @@ export const createBooks = async (req, res) => {
 
 export const getBooks = async (req, res) => {
     try {
-        const book = await Books.findById(req.params.id);
-        if (!book) return res.status(404).json({ message: "Book not found" });
-        res.json(book);
+        const books = await Books.find();
+        res.json(books);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -22,8 +21,9 @@ export const getBooks = async (req, res) => {
 
 export const getBookById = async (req, res) => {
     try {
-        const books = await Books.find();
-        res.json(books);
+        const book = await Books.findById(req.params.id);
+        if (!book) return res.status(404).json({ message: "Book not found" });
+        res.json(book);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
