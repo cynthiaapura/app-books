@@ -8,14 +8,21 @@ export const createBooks = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
-};
+}
 
 export const getBooks = async (req, res) => {
     try {
-        const books = await Books.find();
+        const { isbn, title, author } = req.query;
+
+        const filter = {};
+        if (isbn) filter.isbn = isbn;
+        if (title) filter.title = new RegExp(title, 'i'); 
+        if (author) filter.author = new RegExp(author, 'i');
+
+        const books = await Books.find(filter);
         res.json(books);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: 'Erreur serveur', error: error.message });
     }
 }
 
@@ -41,7 +48,7 @@ export const updateBooks = async (req, res) => {
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
-};
+}
 
 export const deleteBooks = async (req, res) => {
     try {
