@@ -36,6 +36,37 @@ export const getBookById = async (req, res) => {
     }
 }
 
+export const getGenreStats = async (req, res) => {
+    try {
+        const totalBooks = await Books.countDocuments(); // Compte le nombre total de livres
+
+        const stats = await Books.aggregate([ // aggregate permet de faire des opérations avancées sur les données
+        { $unwind: "$genre" },  // Permet de décomposer le tableau de genres
+        {
+            $group: { // Regroupe par genre
+                _id: "$genre",
+                count: { $sum: 1 }
+            }
+        },
+        {
+            $project: { // Formate la sortie
+                genre: "$_id",
+                count: 1,
+                percentage: {
+                    $round: [{ $multiply: [{ $divide: ["$count", totalBooks] }, 100] }, 2]
+                },
+                _id: 0
+            }
+        }
+        ]);
+
+        res.json(stats);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
 export const updateBooks = async (req, res) => {
     try {
         const updatedBooks = await Books.findByIdAndUpdate(

@@ -27,8 +27,8 @@ const TrainerSchema = new mongoose.Schema({
 })
 
 TrainerSchema.index(
-  { name: "text", bio: "text" },
-  { weights: { name: 5, bio: 1 } }
+    { name: "text", bio: "text" },
+    { weights: { name: 5, bio: 1 } }
 );
 
 TrainerSchema.methods.addPokemon = async function(pokemonId) {
