@@ -85,7 +85,7 @@ const BookSchema = new mongoose.Schema({
   },
   numberPages: {
     type: Number,
-    required: true,
+    required: false,
     min: 1
   }
 }, { timestamps: true });
